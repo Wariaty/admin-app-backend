@@ -16,9 +16,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static java.util.Collections.emptyList;
+import static java.util.Optional.ofNullable;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Component
@@ -52,11 +54,9 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     public static String getJwtFromRequest(HttpServletRequest request) {
-        var authHeader = request.getHeader(AUTHORIZATION);
-        var tokenMatcher = TOKEN_REGEX.matcher(authHeader);
-        if (tokenMatcher.matches()) {
-            return tokenMatcher.group("token");
-        }
-        return null;
+       return ofNullable(request.getHeader(AUTHORIZATION)).map(TOKEN_REGEX::matcher)
+                .filter(Matcher::matches)
+                .map(tokenMatcher -> tokenMatcher.group("token"))
+                .orElse(null);
     }
 }
