@@ -30,7 +30,7 @@ public class JwtProvider {
                         .setExpiration(expiryDate)
                         .signWith(SignatureAlgorithm.HS256, jwtSecret)
                         .compact(),
-                expiryDate);
+                expiryDate.getTime());
     }
 
     public String getUserIdFromJWT(String token) {
