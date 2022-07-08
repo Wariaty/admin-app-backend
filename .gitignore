@@ -18,6 +18,3 @@ target/
 *.iws
 *.iml
 *.ipr
-
-### maven ###
-.mvn
