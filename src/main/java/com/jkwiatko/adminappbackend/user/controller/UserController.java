@@ -24,8 +24,13 @@ public class UserController {
     private PasswordEncoder passwordEncoder;
 
     @GetMapping
-    public List<UserResponse> login() {
+    public List<UserResponse> getUsers() {
         return userRepository.findAll().stream().map(user -> modelMapper.map(user, UserResponse.class)).toList();
+    }
+
+    @GetMapping("/me")
+    public UserResponse getCurrentlyLoginUser(@AuthenticationPrincipal UserDetails currentUser) {
+        return userRepository.findByEmail(currentUser.getUsername()).map(user -> modelMapper.map(user, UserResponse.class)).orElse(null);
     }
 
     @PostMapping
