@@ -18,6 +18,8 @@ jobs:
         ports:
           - "5432:5432"
 
+    env:
+      branch: ${{ git branch --show-current }}
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 17
@@ -27,7 +29,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Do virtual merge
-      run: MERGED = $(git branch --show-current) && git checkout main && git merge $MERGED
+      run: git checkout main && git merge $MERGED
     - name: Validate virtual merge
       run: cat ./pom.xml
     - name: Test with Maven
