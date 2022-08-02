@@ -43,7 +43,7 @@ jobs:
 
     - name: Validate virtual merge
       run: > 
-        which libreoffice
+        which libreoffice &&
         echo ${{secrets.TEST_TEST}}
 
     - name: Test with Maven
