@@ -33,9 +33,9 @@ jobs:
 
     - name: Set upt LibreOffice
       run: sudo apt-add-repository ppa:libreoffice/ppa && \
-           apt update && \
-           apt upgrade && \
-           apt install libreoffice
+           apt-get update && \
+           apt-get upgrade && \
+           apt-get install libreoffice
 
     - name: Do virtual merge
       run: git fetch origin ${{ github.head_ref }} && git merge origin/${{ github.head_ref }}
