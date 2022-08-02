@@ -42,9 +42,8 @@ jobs:
       run: git fetch origin ${{ github.head_ref }} && git merge origin/${{ github.head_ref }}
 
     - name: Validate virtual merge
-      run: > 
-        which libreoffice &&
-        echo ${{ secrets.TEST_TEST }}
+      run: >
+        run: echo TEST_TEST | sed -e 's/\(.\)/\1 /g'
 
     - name: Test with Maven
       run: mvn --batch-mode --update-snapshots verify
