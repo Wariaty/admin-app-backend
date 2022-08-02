@@ -32,10 +32,10 @@ jobs:
         cache: maven
 
     - name: Set upt LibreOffice
-      run: apt-add-repository ppa:libreoffice/ppa && \
-           apt update \
-           apt upgrade \
-           apt install libreoffice \
+      run: sudo apt-add-repository ppa:libreoffice/ppa && \
+           sudo apt update \
+           sudo apt upgrade \
+           sudo apt install libreoffice \
 
     - name: Do virtual merge
       run: git fetch origin ${{ github.head_ref }} && git merge origin/${{ github.head_ref }}
