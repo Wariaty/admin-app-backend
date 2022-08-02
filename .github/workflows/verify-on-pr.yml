@@ -31,11 +31,8 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
-    - name: Add LibreOffice
-      run: sudo apt-add-repository ppa:libreoffice/ppa
-      && sudo apt update
-      && sudo apt upgrade
-      && sudo apt install libreoffice
+    - name: Install LibreOffice
+      run: sudo apt-add-repository ppa:libreoffice/ppa && sudo apt update && sudo apt upgrade && sudo apt install libreoffice
 
     - name: Do virtual merge
       run: git fetch origin ${{ github.head_ref }} && git merge origin/${{ github.head_ref }}
