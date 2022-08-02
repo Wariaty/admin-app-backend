@@ -43,8 +43,8 @@ jobs:
 
     - name: Validate virtual merge
       run: > 
-      which libreoffice
-      echo ${{TEST_TEST}}
+        which libreoffice
+        echo ${{TEST_TEST}}
 
     - name: Test with Maven
       run: mvn --batch-mode --update-snapshots verify
