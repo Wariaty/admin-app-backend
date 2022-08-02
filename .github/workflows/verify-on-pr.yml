@@ -31,20 +31,17 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
-    - name: Add LibreOffice ppa
+    - name: Add LibreOffice
       run: sudo apt-add-repository ppa:libreoffice/ppa
-
-    - name: Update apt
-      run: sudo apt update && apt upgrade
-
-    - name: Install LibreOffice
-      run: sudo apt install libreoffice
+      && sudo apt update
+      && sudo apt upgrade
+      && sudo apt install libreoffice
 
     - name: Do virtual merge
       run: git fetch origin ${{ github.head_ref }} && git merge origin/${{ github.head_ref }}
 
     - name: Validate virtual merge
-      run: cat ./pom.xml && which libreoffice
+      run: cat ./pom.xml
 
     - name: Test with Maven
       run: mvn --batch-mode --update-snapshots verify
