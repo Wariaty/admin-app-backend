@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.jkwiatko</groupId>
     <artifactId>admin-app-backend</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>admin-app-backend</name>
     <description>admin-app-backend</description>
     <properties>
@@ -86,5 +86,25 @@
             </plugin>
         </plugins>
     </build>
+
+
+    <profiles>
+        <profile>
+            <id>github</id>
+            <activation>
+                <property>
+                    <name>useGitHubPackages</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <distributionManagement>
+                <repository>
+                    <id>github</id>
+                    <name>GitHub Packages</name>
+                    <url>https://maven.pkg.github.com/jkwiatko/admin-app-backend</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+    </profiles>
 
 </project>
