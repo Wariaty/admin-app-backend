@@ -43,4 +43,4 @@ jobs:
           repo: 'admin-app-backend'
           package-name: 'com.jkwiatko.admin-app-backend'
           min-versions-to-keep: 1
-          ignore-versions: '^(0|[1-9]\\d*)\\.0\\.0$'
+          ignore-versions: '^(0|[1-9]\\d*)\\.0\\.(0|[1-9]\\d*)$'
