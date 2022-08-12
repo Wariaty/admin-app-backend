@@ -31,12 +31,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Publish package
-        run: mvn --batch-mode -DuseGitHubPackages deploy
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Remove old snapshot packages
+      - name: Remove old packages
         uses: actions/delete-package-versions@v3
         with:
           owner: 'jkwiatko'
@@ -44,3 +39,8 @@ jobs:
           package-name: 'com.jkwiatko.admin-app-backend'
           min-versions-to-keep: 1
           ignore-versions: '^(0|[1-9]\\d*)\\.0\\.(0|[1-9]\\d*)$'
+
+      - name: Publish new package
+        run: mvn --batch-mode -DuseGitHubPackages deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
