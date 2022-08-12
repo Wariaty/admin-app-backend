@@ -35,3 +35,12 @@ jobs:
         run: mvn --batch-mode -DuseGitHubPackages deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Remove old snapshot packages
+        uses: actions/delete-package-versions@v3
+        with:
+          owner: 'jkwiatko'
+          repo: 'admin-app-backend'
+          package-name: 'com.jkwiatko.admin-app-backend'
+          min-versions-to-keep: 1
+          ignore-versions: '^(0|[1-9]\\d*)\\.0\\.0$'
