@@ -35,7 +35,7 @@ jobs:
         uses: actions/delete-package-versions@v3
         with:
           package-name: 'com.jkwiatko.admin-app-backend'
-          ignore-versions: '^(0|[1-9]\\d*)\\.0\\.(0|[1-9]\\d*)$'
+          delete-only-pre-release-versions: true
 
       - name: Publish new package
         run: mvn --batch-mode -DuseGitHubPackages deploy
