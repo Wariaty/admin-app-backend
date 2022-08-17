@@ -19,10 +19,10 @@ jobs:
           ref: main
 
       - name: Check if PR was merged
-        run: > 
-        if grep -q ${{ github.head_ref }} <<< $(git branch -a --merged);
-        then WAS_MARGED=true; else WAS_MARGED=false;
-        fi
+        run: >
+          if grep -q ${{ github.head_ref }} <<< $(git branch -a --merged);
+          then WAS_MARGED=true; else WAS_MARGED=false;
+          fi
 
       - uses: actions/setup-java@v3
         if: ${{ WAS_MARGED }}
