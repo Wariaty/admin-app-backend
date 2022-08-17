@@ -7,26 +7,25 @@ jobs:
   publish-snapshot:
 
     runs-on: ubuntu-latest
-    if: ${{ contains($(git branch -a --merged), 'teeest') }}
+    env:
+      WAS_MARGED: false
     permissions:
       contents: read
       packages: write
-
-    services:
-      postgres:
-        image: postgres:13-alpine
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-        ports:
-          - "5432:5432"
 
     steps:
       - uses: actions/checkout@v3
         with:
           ref: main
 
+      - name: Check if PR was merged
+        run: > 
+        if grep -q ${{ github.head_ref }} <<< $(git branch -a --merged);
+        then WAS_MARGED=true; else WAS_MARGED=false;
+        fi
+
       - uses: actions/setup-java@v3
+        if: ${{ WAS_MARGED }}
         with:
           java-version: '17'
           distribution: 'temurin'
@@ -34,11 +33,13 @@ jobs:
 
       - name: Remove old packages
         uses: actions/delete-package-versions@v3
+        if: ${{ WAS_MARGED }}
         with:
           package-name: 'com.jkwiatko.admin-app-backend'
           ignore-versions: '.*(?<!-SNAPSHOT)$'
 
       - name: Publish new package
         run: mvn --batch-mode -DuseGitHubPackages deploy
+        if: ${{ WAS_MARGED }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
