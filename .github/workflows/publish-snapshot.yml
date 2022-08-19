@@ -32,7 +32,8 @@ jobs:
         run: mvn --batch-mode -DuseGitHubPackages -DskipTests package
 
       - name: Extract artifact name
-        run: echo "artifact_name=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)-$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+        run: >
+          echo 'artifact_name=${project.artifactId}:${project.version}' | mvn -N -q -DforceStdout help:evaluate >> $GITHUB_ENV
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
