@@ -1,15 +1,15 @@
 name: Publish relese package to GitHub Packages
 
 on:
-  workflow_dispatch:
+  push:
 
 jobs:
   publish-relese:
 
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-      packages: write
+      contents: write
+    if: startsWith(github.ref, 'refs/tags/')
 
     services:
       postgres:
@@ -21,7 +21,8 @@ jobs:
           - "5432:5432"
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
 
       - uses: actions/setup-java@v3
         with:
@@ -29,7 +30,13 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Publish new package
-        run: mvn --batch-mode -DuseGitHubPackages deploy
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Test and package
+        run: mvn --batch-mode --update-snapshots package
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: target/*.jar
+          body: siemanko
+
+
