@@ -28,7 +28,15 @@ jobs:
           package-name: 'com.jkwiatko.admin-app-backend'
           ignore-versions: '.*(?<!-SNAPSHOT)$'
 
-      - name: Publish new package
-        run: mvn --batch-mode -DuseGitHubPackages -DskipTests deploy
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create package
+        run: mvn --batch-mode -DuseGitHubPackages -DskipTests package
+
+      - name: Extract artifact name
+        run: echo "artifact_name=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)-$(mvn help:evaluate -Dexpression=project
+        .version -q -DforceStdout)" >> $GITHUB_ENV
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.artifact_name }}
+          path: target/*.jar
