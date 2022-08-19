@@ -54,7 +54,7 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ release_version }}
+          tag_name: ${{ env.release_version }}
           files: target/*.jar
           fail_on_unmatched_files: true
           body: Test release triggered by workflow
