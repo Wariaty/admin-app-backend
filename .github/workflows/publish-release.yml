@@ -37,7 +37,7 @@ jobs:
 
       - name: Test and package release
         run: | 
-          mvn -B -U -DremoveSnapshot validate
+          mvn -B -DremoveSnapshot validate
           mvn -B package
 
       - name: Extract artifact name
@@ -59,7 +59,10 @@ jobs:
           tag_name: ${{ env.release_version }}
           files: target/*.jar
           fail_on_unmatched_files: true
-          body: Test release triggered by workflow
+          body: > 
+          '___
+          Note: Source code attachments are left `empty` intentionally to avoid accidental leaks.
+          Unfortunately GitHub does not allow removing them entirely, just yet.'
 
       - name: Prepare repo upcoming development
         run: | 
