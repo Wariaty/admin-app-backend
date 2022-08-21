@@ -52,6 +52,16 @@ jobs:
 
       - name: Push changes to repo
         run: git push --tags
+        
+      - name: Generate release notes
+        run: > 
+          echo -n "notes=# What's Changed\n
+            ---\n
+            - Add release changelist here...\n
+            ---\n
+            Note: Source code attachments are left `empty` intentionally to avoid accidental leaks.
+            Unfortunately GitHub does not allow removing them entirely, just yet."
+            >> $GITHUB_ENV
 
       - name: Release
         uses: softprops/action-gh-release@v1
@@ -59,13 +69,7 @@ jobs:
           tag_name: ${{ env.release_version }}
           files: target/*.jar
           fail_on_unmatched_files: true
-          body: > 
-            # What's Changed
-            ---
-            - Add changelist here...
-            ---
-            Note: Source code attachments are left `empty` intentionally to avoid accidental leaks.
-            Unfortunately GitHub does not allow removing them entirely, just yet.
+          body: ${{ env.notes }}
 
       - name: Prepare repo upcoming development
         run: | 
