@@ -60,9 +60,12 @@ jobs:
           files: target/*.jar
           fail_on_unmatched_files: true
           body: > 
-            '___
+            # What's Changed
+            ---
+            - Add changelist here...
+            ---
             Note: Source code attachments are left `empty` intentionally to avoid accidental leaks.
-            Unfortunately GitHub does not allow removing them entirely, just yet.'
+            Unfortunately GitHub does not allow removing them entirely, just yet.
 
       - name: Prepare repo upcoming development
         run: | 
