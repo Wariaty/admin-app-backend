@@ -55,7 +55,7 @@ jobs:
         
       - name: Generate release notes
         run: > 
-          echo -n "notes=# What's Changed\n
+          echo -n "release_notes=# What's Changed\n
             ---\n
             - Add release changelist here...\n
             ---\n
@@ -69,7 +69,7 @@ jobs:
           tag_name: ${{ env.release_version }}
           files: target/*.jar
           fail_on_unmatched_files: true
-          body: ${{ env.notes }}
+          body: ${{ env.release_notes }}
 
       - name: Prepare repo upcoming development
         run: | 
