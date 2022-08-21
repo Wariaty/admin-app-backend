@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.jkwiatko</groupId>
     <artifactId>admin-app-backend</artifactId>
-    <version>0.7.0-SNAPSHOT</version>
+    <version>0.7.0</version>
     <name>admin-app-backend</name>
     <description>admin-app-backend</description>
     <properties>
