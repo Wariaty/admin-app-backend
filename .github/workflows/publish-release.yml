@@ -36,7 +36,9 @@ jobs:
           cache: maven
 
       - name: Test and package release
-        run: mvn --batch-mode --update-snapshots -DremoveSnapshot package
+        run: | 
+          mvn -B -U -DremoveSnapshot validate
+          mvn -B package
 
       - name: Extract artifact name
         run: echo 'release_version=${project.version}' | mvn -N -q -DforceStdout help:evaluate >> $GITHUB_ENV
@@ -61,7 +63,8 @@ jobs:
 
       - name: Prepare repo upcoming development
         run: | 
-          mvn --batch-mode -DbumpMinor validate
+          mvn -B -DbumpMinor validate
+          mvn -B test
           git commit -am "Prepare next version"
           git push
 
