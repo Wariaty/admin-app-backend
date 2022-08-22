@@ -3,11 +3,6 @@ name: Publish relese
 on:
   workflow_dispatch:
     branch:
-      description: 'Branch to use'
-      required: true
-      default: 'master'
-      type: choice
-      options:
         [ 'master' ]
 
 jobs:
