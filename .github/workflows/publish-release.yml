@@ -47,21 +47,10 @@ jobs:
         env:
           version: ${{ env.release_version }}
         run: |
+          git checkout -b release-$(version)
           git commit -am "Prepare release version $(version)"
           git tag $(version)
-
-      - name: Push changes to repo
-        run: git push --tags
-        
-      - name: Generate release notes
-        run: > 
-          echo -n "release_notes=# What's Changed\n
-            ---\n
-            - Add release changelist here...\n
-            ---\n
-            Note: Source code attachments are left `empty` intentionally to avoid accidental leaks.
-            Unfortunately GitHub does not allow removing them entirely, just yet."
-            >> $GITHUB_ENV
+          git push --tags
 
       - name: Release
         uses: softprops/action-gh-release@v1
@@ -69,10 +58,13 @@ jobs:
           tag_name: ${{ env.release_version }}
           files: target/*.jar
           fail_on_unmatched_files: true
-          body: ${{ env.release_notes }}
+          body: >
+            Source code attachments are left `empty` intentionally to avoid accidental leaks.
+            Unfortunately GitHub does not allow removing them entirely, just yet.
 
       - name: Prepare repo upcoming development
         run: | 
+          git checkout master
           mvn -B -DbumpMinor validate
           mvn -B test
           git commit -am "Prepare next version"
