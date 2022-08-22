@@ -1,0 +1,81 @@
+name: Publish relese
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish-relese:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    services:
+      postgres:
+        image: postgres:13-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - "5432:5432"
+
+    steps:
+      - name: Configure git config
+        run: |
+          git config --global user.name 'Release Bot'
+          git config --global user.email 'release-bot@users.noreply.github.com'
+
+      - name: Checkout branch
+        uses: actions/checkout@v3
+
+      - name: setup java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Test and package release
+        run: | 
+          mvn -B -DremoveSnapshot validate
+          mvn -B package
+
+      - name: Extract artifact name
+        run: echo 'release_version=${project.version}' | mvn -N -q -DforceStdout help:evaluate >> $GITHUB_ENV
+
+      - name: Commit & tag
+        env:
+          version: ${{ env.release_version }}
+        run: |
+          git checkout -b "release_$version"
+          git commit -am "Prepare release version $version"
+          git tag $version
+          git push
+          git push --tags
+
+      - name: Prepare release notes
+        run: |
+          echo "# What's Changed" > release-notes.txt
+          echo "---" >> release-notes.txt
+          echo "- Add release changelist here..." >> release-notes.txt
+          echo "---" >> release-notes.txt
+          echo "Note: Source code attachments are left `empty` intentionally to avoid accidental leaks." >> release-notes.txt
+          echo "Unfortunately GitHub does not allow removing them entirely, just yet." >> release-notes.txt
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.release_version }}
+          files: target/*.jar
+          fail_on_unmatched_files: true
+          body_path: release-notes.txt
+
+      - name: Prepare repo upcoming development
+        run: | 
+          git checkout main
+          mvn -B -DbumpMinor validate
+          mvn -B test
+          git commit -am "Prepare next development version"
+          git push
+
+

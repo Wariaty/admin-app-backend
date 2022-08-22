@@ -1,7 +1,9 @@
-name: Publish snapshot package to GitHub Packages
+name: Publish snapshot
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   publish-snapshot:
@@ -11,19 +13,8 @@ jobs:
       contents: read
       packages: write
 
-    services:
-      postgres:
-        image: postgres:13-alpine
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-        ports:
-          - "5432:5432"
-
     steps:
       - uses: actions/checkout@v3
-        with:
-          ref: main
 
       - uses: actions/setup-java@v3
         with:
@@ -31,7 +22,21 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Publish package
-        run: mvn --batch-mode -DuseGitHubPackages deploy
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Remove old packages
+        uses: actions/delete-package-versions@v3
+        with:
+          package-name: 'com.jkwiatko.admin-app-backend'
+          ignore-versions: '.*(?<!-SNAPSHOT)$'
+
+      - name: Create package
+        run: mvn --batch-mode -DuseGitHubPackages -DskipTests package
+
+      - name: Extract artifact name
+        run: >
+          echo 'artifact_name=${project.artifactId}-${project.version}' | mvn -N -q -DforceStdout help:evaluate >> $GITHUB_ENV
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.artifact_name }}
+          path: target/*.jar
