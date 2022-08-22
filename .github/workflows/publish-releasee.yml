@@ -2,13 +2,12 @@ name: Publish relese
 
 on:
   workflow_dispatch:
-    branches:
-        [ 'master' ]
 
 jobs:
   publish-relese:
 
     runs-on: ubuntu-latest
+    if: ${{ github.ref == 'main' }}
     permissions:
       contents: write
 
