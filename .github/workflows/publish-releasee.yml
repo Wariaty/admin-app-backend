@@ -43,27 +43,36 @@ jobs:
       - name: Extract artifact name
         run: echo 'release_version=${project.version}' | mvn -N -q -DforceStdout help:evaluate >> $GITHUB_ENV
 
-      - name: Commit & tag
+      - name: Create release branch & tag
         env:
           version: ${{ env.release_version }}
         run: |
-          git add -A
+          git add pom.xml
           git checkout -b "release_$version"
           git commit -m "Prepare release version $version"
           git tag $version
-          git push
-          git push --tags
+
+      - name: Prepare main for upcoming development
+        env:
+          version: ${{ env.release_version }}
+        run: |
+          git checkout main
+          mvn -B -DbumpMinor validate
+          mvn -B test
+          git add pom.xml
+          git commit -m "Prepare next development version"
+          git checkout -
 
       - name: Prepare release notes
         run: |
-          echo "# What's Changed" > release-notes.txt
-          echo "---" >> release-notes.txt
+          echo "# What's Changed:" > release-notes.txt
           echo "- Add release changelist here..." >> release-notes.txt
-          echo "---" >> release-notes.txt
-          echo "Note: Source code attachments are left `empty` intentionally to avoid accidental leaks." >> release-notes.txt
-          echo "Unfortunately GitHub does not allow removing them entirely, just yet." >> release-notes.txt
+          echo "- " >> release-notes.txt
+          echo "# Note:" >> release-notes.txt
+          echo "Source code attachments are left empty intentionally, to avoid accidental leaks." >> release-notes.txt
+          echo "Unfortunately GitHub doesn't provide possibilty to remove them, just yet." >> release-notes.txt
 
-      - name: Release
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ env.release_version }}
@@ -71,12 +80,10 @@ jobs:
           fail_on_unmatched_files: true
           body_path: release-notes.txt
 
-      - name: Prepare repo upcoming development
-        run: | 
-          git checkout main
-          mvn -B -DbumpMinor validate
-          mvn -B test
-          git commit -am "Prepare next development version"
-          git push
+     - name: Push changes to remote repo
+       run: |
+         git push origin "release_$version"
+         git push origin master
+         git push --tags
 
 
