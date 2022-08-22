@@ -51,17 +51,8 @@ jobs:
           git checkout -b "release_$version"
           git commit -m "Prepare release version $version"
           git tag $version
-
-      - name: Prepare main for upcoming development
-        env:
-          version: ${{ env.release_version }}
-        run: |
-          git checkout main
-          mvn -B -DbumpMinor validate
-          mvn -B test
-          git add pom.xml
-          git commit -m "Prepare next development version"
-          git checkout -
+          git push origin "release_$version"
+          git push --tags
 
       - name: Prepare release notes
         run: |
@@ -80,11 +71,15 @@ jobs:
           fail_on_unmatched_files: true
           body_path: release-notes.txt
 
-      - name: Push changes to remote repo
+      - name: Prepare main for upcoming development
         run: |
-          git push origin "release_$version"
-          git push origin master
-          git push --tags
+          git checkout main
+          mvn clean
+          mvn -B -DbumpMinor validate
+          mvn -B test
+          git add pom.xml
+          git commit -m "Prepare next development version"
+          git push
 
 
 
