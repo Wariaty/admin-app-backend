@@ -2,6 +2,13 @@ name: Publish relese
 
 on:
   workflow_dispatch:
+    branch:
+      description: 'Branch to use'
+      required: true
+      default: 'master'
+      type: choice
+      options:
+        [ 'master' ]
 
 jobs:
   publish-relese:
@@ -39,9 +46,7 @@ jobs:
         run: |
           mvn -B -DremoveSnapshot validate
           mvn -B package
-
-      - name: Extract artifact name
-        run: echo 'release_version=v${project.version}' | mvn -N -q -DforceStdout help:evaluate >> $GITHUB_ENV
+          echo 'release_version=v${project.version}' | mvn -N -q -DforceStdout help:evaluate >> $GITHUB_ENV
 
       - name: Create release branch & tag
         env:
@@ -57,7 +62,6 @@ jobs:
         run: |
           echo "# What's Changed:" > release-notes.txt
           echo "- Add release changelist here..." >> release-notes.txt
-          echo "- " >> release-notes.txt
           echo "# Note:" >> release-notes.txt
           echo "Source code attachments are left empty intentionally, to avoid accidental leaks." >> release-notes.txt
           echo "Unfortunately GitHub doesn't provide possibilty to remove them, just yet." >> release-notes.txt
