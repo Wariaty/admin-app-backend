@@ -7,7 +7,6 @@ jobs:
   publish-relese:
 
     runs-on: ubuntu-latest
-    if: ${{ github.ref == 'main' }}
     permissions:
       contents: write
 
@@ -21,6 +20,11 @@ jobs:
           - "5432:5432"
 
     steps:
+      - name: test
+        env:
+          test: ${{ github.ref }}
+        run: echo "the ref is equel to=$test"
+
       - name: Configure git config
         run: |
           git config --global user.name 'Release Bot'
