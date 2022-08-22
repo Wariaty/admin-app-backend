@@ -41,7 +41,7 @@ jobs:
           mvn -B package
 
       - name: Extract artifact name
-        run: echo 'release_version=${project.version}' | mvn -N -q -DforceStdout help:evaluate >> $GITHUB_ENV
+        run: echo 'release_version=v${project.version}' | mvn -N -q -DforceStdout help:evaluate >> $GITHUB_ENV
 
       - name: Create release branch & tag
         env:
@@ -50,9 +50,8 @@ jobs:
           git add pom.xml
           git checkout -b "release_$version"
           git commit -m "Prepare release version $version"
-          git tag $version
           git push origin "release_$version"
-          git push --tags
+          echo "tag_target=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
       - name: Prepare release notes
         run: |
@@ -67,6 +66,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ env.release_version }}
+          target_commitish: ${{ env.tag_target }}
           files: target/*.jar
           fail_on_unmatched_files: true
           body_path: release-notes.txt
