@@ -47,8 +47,9 @@ jobs:
         env:
           version: ${{ env.release_version }}
         run: |
+          git add -A
           git checkout -b "release_$version"
-          git commit -am "Prepare release version $version"
+          git commit -m "Prepare release version $version"
           git tag $version
           git push
           git push --tags
