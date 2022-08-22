@@ -36,7 +36,7 @@ jobs:
           cache: maven
 
       - name: Test and package release
-        run: | 
+        run: |
           mvn -B -DremoveSnapshot validate
           mvn -B package
 
@@ -80,10 +80,10 @@ jobs:
           fail_on_unmatched_files: true
           body_path: release-notes.txt
 
-     - name: Push changes to remote repo
-       run: |
-         git push origin "release_$version"
-         git push origin master
-         git push --tags
+      - name: Push changes to remote repo
+        run: |
+          git push origin "release_$version"
+          git push origin master
+          git push --tags
 
 
