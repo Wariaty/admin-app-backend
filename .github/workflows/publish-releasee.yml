@@ -2,11 +2,20 @@ name: Publish relese
 
 on:
   workflow_dispatch:
+    inputs:
+      Branch:
+        description: 'Branch to use'
+        required: true
+        default: 'main'
+        type: choice
+        options:
+          - master
 
 jobs:
   publish-relese:
 
     runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/main') }}
     permissions:
       contents: write
 
@@ -20,11 +29,6 @@ jobs:
           - "5432:5432"
 
     steps:
-      - name: test
-        env:
-          test: ${{ github.ref }}
-        run: echo "the ref is equel to=$test"
-
       - name: Configure git config
         run: |
           git config --global user.name 'Release Bot'
