@@ -44,7 +44,7 @@ jobs:
           artifact=$(echo '${project.name}-${project.version}' | mvn -N -q -DforceStdout help:evaluate)
           echo "target/$artifact.jar" | xargs md5sum > "target/$artifact.md5"
           echo 'release_version=v${project.version}' | mvn -N -q -DforceStdout help:evaluate >> $GITHUB_ENV
-          echo "\nartifact_name=$artifact" >> $GITHUB_ENV
+          echo -e "\nartifact_name=$artifact" >> $GITHUB_ENV
 
       - name: Create release branch & tag
         env:
