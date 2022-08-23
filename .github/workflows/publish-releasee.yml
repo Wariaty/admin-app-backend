@@ -66,14 +66,16 @@ jobs:
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
+        env:
+          artifact_name: ${{ env.artifact_name }}
         with:
           tag_name: ${{ env.release_version }}
           target_commitish: ${{ env.tag_target }}
           fail_on_unmatched_files: true
           body_path: action-release-notes.txt
           files: | 
-            target/*.jar
-            target/*.md5
+            "$artifact_name.jar"
+            "$artifact_name.md5"
 
       - name: Prepare for upcoming development
         run: |
