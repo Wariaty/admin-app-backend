@@ -74,8 +74,8 @@ jobs:
           fail_on_unmatched_files: true
           body_path: action-release-notes.txt
           files: |
-            ${{ join(env.artifact_name, '.jar') }}
-            ${{ join(env.artifact_name, '.md5') }}
+            target/*.jar
+            target/*.md5
 
       - name: Prepare for upcoming development
         run: |
