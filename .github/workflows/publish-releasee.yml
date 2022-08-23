@@ -60,6 +60,11 @@ jobs:
           echo "Source code attachments are left empty intentionally to avoid accidental leaks." >> action-release-notes.txt
           echo "Unfortunately, GitHub doesn't provide the possibility to remove them just yet." >> action-release-notes.txt
 
+      - name: test
+        env:
+          test_var: ${{ env.release_version }}
+        run: echo $test_var
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
