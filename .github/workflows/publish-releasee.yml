@@ -44,6 +44,8 @@ jobs:
           artifact=$(echo '${project.name}-${project.version}' | mvn -N -q -DforceStdout help:evaluate)
           version=$(echo 'release_version=v${project.version}' | mvn -N -q -DforceStdout help:evaluate)
           echo "target/$artifact.jar" | xargs md5sum > "target/$artifact.md5"
+          echo "jar_path=target/$artifact.jar" >> $GITHUB_ENV 
+          echo "md5_path=target/$artifact.md5" >> $GITHUB_ENV 
           echo "release_version=$version" >> $GITHUB_ENV 
 
       - name: Create release branch & tag
@@ -74,8 +76,8 @@ jobs:
           fail_on_unmatched_files: true
           body_path: action-release-notes.txt
           files: |
-            target/*.jar
-            target/*.md5
+            ${{ env.jar_path }}
+            ${{ env.md5_path }}
 
       - name: Prepare for upcoming development
         run: |
