@@ -77,7 +77,7 @@ jobs:
 
       - name: Prepare for upcoming development
         run: |
-          git checkout master
+          git checkout main
           mvn clean
           mvn -B -DbumpMinor validate
           mvn -B test
