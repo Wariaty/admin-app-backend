@@ -1,4 +1,4 @@
-name: Publish relese
+name: publish relese
 
 on:
   workflow_dispatch:
@@ -8,6 +8,7 @@ jobs:
 
     runs-on: ubuntu-latest
     if: ${{ github.ref == 'refs/heads/main' }}
+    timeout-minutes: 50
     permissions:
       contents: write
 
@@ -29,7 +30,7 @@ jobs:
       - name: Checkout branch
         uses: actions/checkout@v3
 
-      - name: setup java
+      - name: Set up Java
         uses: actions/setup-java@v3
         with:
           java-version: '17'
@@ -38,7 +39,7 @@ jobs:
 
       - name: Test and package release
         run: |
-          mvn -B -DremoveSnapshot validate
+          mvn -B -U -DremoveSnapshot validate
           mvn -B package
           echo 'release_version=v${project.version}' | mvn -N -q -DforceStdout help:evaluate >> $GITHUB_ENV
 
@@ -47,18 +48,17 @@ jobs:
           version: ${{ env.release_version }}
         run: |
           git add pom.xml
+          git commit -m "Release: Update pom version to $version"
           git checkout -b "release_$version"
-          git commit -m "Prepare release version $version"
-          git push origin "release_$version"
           echo "tag_target=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
       - name: Prepare release notes
         run: |
-          echo "# What's Changed:" > release-notes.txt
-          echo "- Add release changelist here..." >> release-notes.txt
-          echo "# Note:" >> release-notes.txt
-          echo "Source code attachments are left empty intentionally, to avoid accidental leaks." >> release-notes.txt
-          echo "Unfortunately GitHub doesn't provide possibilty to remove them, just yet." >> release-notes.txt
+          echo "# What's Changed:" > action-release-notes.txt
+          echo "- Add release changelist here..." >> action-release-notes.txt
+          echo "# Notes:" >> action-release-notes.txt
+          echo "Source code attachments are left empty intentionally to avoid accidental leaks." >> action-release-notes.txt
+          echo "Unfortunately, GitHub doesn't provide the possibility to remove them just yet." >> action-release-notes.txt
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
@@ -67,17 +67,23 @@ jobs:
           target_commitish: ${{ env.tag_target }}
           files: target/*.jar
           fail_on_unmatched_files: true
-          body_path: release-notes.txt
+          body_path: action-release-notes.txt
 
-      - name: Prepare main for upcoming development
+      - name: Prepare for upcoming development
         run: |
-          git checkout main
+          git checkout master
           mvn clean
           mvn -B -DbumpMinor validate
           mvn -B test
           git add pom.xml
           git commit -m "Prepare next development version"
-          git push
 
-
-
+      - name: Log changes
+        run : |
+          git log > log.txt
+          cat log.txt
+          cat pom.xml
+          git checkout -
+          git log > log.txt
+          cat log.txt
+          cat pom.xml
