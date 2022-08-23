@@ -42,7 +42,7 @@ jobs:
           mvn -B -U -DremoveSnapshot validate
           mvn -B package
           artifact=$(echo '${project.name}-${project.version}' | mvn -N -q -DforceStdout help:evaluate)
-          version=$( echo 'release_version=v${project.version}' | mvn -N -q -DforceStdout help:evaluate)
+          version=$(echo 'release_version=v${project.version}' | mvn -N -q -DforceStdout help:evaluate)
           echo "target/$artifact.jar" | xargs md5sum > "target/$artifact.md5"
           echo "jar_name=target/$artifact.jar" >> $GITHUB_ENV
           echo "md5_name=target/$artifact.md5" >> $GITHUB_ENV
