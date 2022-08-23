@@ -42,6 +42,7 @@ jobs:
           mvn -B -U -DremoveSnapshot validate
           mvn -B package
           echo 'release_version=v${project.version}' | mvn -N -q -DforceStdout help:evaluate >> $GITHUB_ENV
+          echo 'target/${project.name}-{project.version}.jar' | mvn -N -q -DforceStdout help:evaluate | md5sum > checksum.md5
 
       - name: Create release branch & tag
         env:
@@ -71,9 +72,11 @@ jobs:
         with:
           tag_name: ${{ env.release_version }}
           target_commitish: ${{ env.tag_target }}
-          files: target/*.jar
           fail_on_unmatched_files: true
           body_path: action-release-notes.txt
+          files: | 
+            target/*.jar
+            checksum.md5
 
       - name: Prepare for upcoming development
         run: |
