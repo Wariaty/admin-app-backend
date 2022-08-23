@@ -44,7 +44,7 @@ jobs:
           artifact=$(echo '${project.name}-${project.version}' | mvn -N -q -DforceStdout help:evaluate)
           echo "target/$artifact.jar" | xargs md5sum > "target/$artifact.md5"
           echo 'release_version=v${project.version}' | mvn -N -q -DforceStdout help:evaluate >> $GITHUB_ENV
-          echo "artifact_name=$artifact" >> $GITHUB_ENV
+          echo "\nartifact_name=$artifact" >> $GITHUB_ENV
 
       - name: Create release branch & tag
         env:
@@ -63,11 +63,6 @@ jobs:
           echo "# Notes:" >> action-release-notes.txt
           echo "Source code attachments are left empty intentionally to avoid accidental leaks." >> action-release-notes.txt
           echo "Unfortunately, GitHub doesn't provide the possibility to remove them just yet." >> action-release-notes.txt
-
-      - name: test
-        env:
-          test_var: ${{ env.release_version }}
-        run: echo $test_var
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
