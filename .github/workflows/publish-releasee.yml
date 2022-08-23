@@ -50,6 +50,7 @@ jobs:
           git add pom.xml
           git commit -m "Release: Update pom version to $version"
           git checkout -b "release_$version"
+          git push origin "release_$version"
           echo "tag_target=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
       - name: Prepare release notes
