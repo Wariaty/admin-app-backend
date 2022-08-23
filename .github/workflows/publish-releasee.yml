@@ -42,7 +42,7 @@ jobs:
           mvn -B -U -DremoveSnapshot validate
           mvn -B package
           echo 'release_version=v${project.version}' | mvn -N -q -DforceStdout help:evaluate >> $GITHUB_ENV
-          echo 'artifact=${project.name}-${project.version}' | mvn -N -q -DforceStdout help:evaluate | eval
+          artifact=$(echo 'artifact=${project.name}-${project.version}' | mvn -N -q -DforceStdout help:evaluate)
           echo "target/$artifact.jar" | xargs md5sum > $artifact.md5
 
       - name: Create release branch & tag
