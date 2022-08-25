@@ -86,4 +86,4 @@ jobs:
           mvn -B -DbumpMinor validate
           git add pom.xml
           git commit -m "Prepare next development version"
-          git push origin master
+          git push origin main
