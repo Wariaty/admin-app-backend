@@ -26,7 +26,6 @@ jobs:
         run: |
           git config --global user.name 'release-wariat'
           git config --global user.email '112089616+release-wariat@users.noreply.github.com'
-          echo -n ${{ secrets.HAL_SHH }} > ~/.ssh/hal
 
       - name: Checkout branch
         uses: actions/checkout@v3
