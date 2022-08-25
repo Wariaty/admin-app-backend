@@ -24,8 +24,9 @@ jobs:
     steps:
       - name: Configure git config
         run: |
-          git config --global user.name 'Release Bot'
-          git config --global user.email 'release-bot@users.noreply.github.com'
+          git config --global user.name 'release-wariat'
+          git config --global user.email '112089616+release-wariat@users.noreply.github.com'
+          echo -n ${{ secrets.HAL_SHH }} > ~/.ssh/hal
 
       - name: Checkout branch
         uses: actions/checkout@v3
@@ -84,16 +85,6 @@ jobs:
           git checkout main
           mvn clean
           mvn -B -DbumpMinor validate
-          mvn -B test
           git add pom.xml
           git commit -m "Prepare next development version"
-
-      - name: Log changes
-        run : |
-          git log > log.txt
-          cat log.txt
-          cat pom.xml
-          git checkout -
-          git log > log.txt
-          cat log.txt
-          cat pom.xml
+          git push origin master
