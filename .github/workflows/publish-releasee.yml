@@ -29,7 +29,8 @@ jobs:
         run: |
           mkdir -p ~/.ssh/
           echo -n "$key" | base64 -d > ~/.ssh/id_ed25519
-          echo "ssh_key=$(cat ~/.ssh/id_ed25519)" >> $GITHUB_ENV 
+          $ssh_key=$(cat ~/.ssh/id_ed25519)
+          echo "ssh_key=$ssh_key" >> $GITHUB_ENV 
           git config --global user.name 'HAL 9000'
           git config --global user.email '112089616+release-wariat@users.noreply.github.com'
           
