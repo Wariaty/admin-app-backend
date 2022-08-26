@@ -30,7 +30,10 @@ jobs:
           echo -n ${{ env.HAL_SSH }} > ~/.ssh/id_ed25519
           echo -n ${{ env.HAL_SSH_PUB }} > ~/.ssh/id_ed25519.pub
           ssh-keyscan -t ed25519 host github.com > ~/.ssh/known_hosts
-          sudo chmod 777 -R  ~/.ssh
+          sudo chmod 600 ~/.ssh/id_ed25519
+          sudo chmod 600 ~/.ssh/id_ed25519.pub
+          sudo chmod 644 ~/.ssh/known_hosts
+          sudo chmod 755 ~/.ssh
           git config --global user.name 'HAL 9000'
           git config --global user.email '112089616+release-wariat@users.noreply.github.com'
           git clone git@github.com:Wariaty/admin-app-backend.git
