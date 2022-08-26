@@ -31,7 +31,8 @@ jobs:
           mkdir -p ~/.ssh/
           echo "$SSH_PRIVATE" > ~/.ssh/key
           echo "$SSH_PUBLIC" > ~/.ssh/key.pub
-          sudo chmod 600 ~/.ssh/private.key
+          sudo chmod 600 ~/.ssh/key
+          sudo chmod 600 ~/.ssh/key.pub
           ssh-keyscan -t ed25519 host github.com > ~/.ssh/known_hosts
           git config --global user.name 'HAL 9000'
           git config --global user.email '112089616+release-wariat@users.noreply.github.com'
