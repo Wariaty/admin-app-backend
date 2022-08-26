@@ -29,8 +29,8 @@ jobs:
           ssh-pub: ${{ secrets.SSH_PUB }}
         run: |
           mkdir -p ~/.ssh/
-          echo -n $ssh-key > ~/.ssh/id_ed25519
-          echo -n $ssh-pub > ~/.ssh/id_ed25519.pub
+          echo -n "$ssh-key" > ~/.ssh/id_ed25519
+          echo -n "$ssh-pub" > ~/.ssh/id_ed25519.pub
           ssh-keyscan -t ed25519 host github.com > ~/.ssh/known_hosts
           sudo chmod 600 ~/.ssh/id_ed25519
           sudo chmod 600 ~/.ssh/id_ed25519.pub
