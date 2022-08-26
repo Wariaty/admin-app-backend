@@ -24,8 +24,11 @@ jobs:
     steps:
     
       - name: Configure git
+        env:
+          siemanko: ${{ env.SSH_KEY }}
         run: |
-          echo -n ${{ env.HAL_SSH }}
+          echo -n $siemanko
+          echo -n "elo"
           mkdir -p ~/.ssh/
           ls -la ~/.ssh/
           echo -n ${{ env.SSH_KEY }} > ~/.ssh/id_ed25519
