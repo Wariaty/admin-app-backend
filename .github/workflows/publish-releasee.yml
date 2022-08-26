@@ -25,6 +25,7 @@ jobs:
     
       - name: Configure git
         run: |
+          echo -n ${{ env.HAL_SSH }}
           mkdir -p ~/.ssh/
           ls -la ~/.ssh/
           echo -n ${{ env.HAL_SSH }} > ~/.ssh/id_ed25519
