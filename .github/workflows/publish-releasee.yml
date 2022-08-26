@@ -12,15 +12,6 @@ jobs:
     permissions:
       contents: write
 
-    services:
-      postgres:
-        image: postgres:13-alpine
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-        ports:
-          - "5432:5432"
-
     steps:
     
       - name: Configure git
@@ -29,7 +20,7 @@ jobs:
           ssh-pub: ${{ secrets.SSH_PUB }}
         run: |
           mkdir -p ~/.ssh/
-          echo -n "$ssh-key" | base64 -d > ~/.ssh/id_ed25519
+          echo -n $ssh-key | base64 -d > ~/.ssh/id_ed25519
           echo -n "$ssh-pub" | base64 -d > ~/.ssh/id_ed25519.pub
           echo $(cd ~/.ssh && md5sum id_ed25519)
           ssh-keyscan -t ed25519 host github.com > ~/.ssh/known_hosts
