@@ -24,13 +24,7 @@ jobs:
     steps:
     
       - name: Configure git
-        env:
-          key: ${{ secrets.SSH_KEY }}
         run: |
-          mkdir -p ~/.ssh/
-          echo -n "$key" | base64 -d > ~/.ssh/id_ed25519
-          var=$(cat ~/.ssh/id_ed25519)
-          echo "ssh_key=$var" >> $GITHUB_ENV 
           git config --global user.name 'HAL 9000'
           git config --global user.email '112089616+release-wariat@users.noreply.github.com'
           
@@ -38,7 +32,7 @@ jobs:
       - name: Checkout branch
         uses: actions/checkout@v3
         with:
-          ssh-key: ${{ secrets.ELO }}
+          ssh-key: ${{ secrets.ELOO }}
 
       - name: Set up Java
         uses: actions/setup-java@v3
