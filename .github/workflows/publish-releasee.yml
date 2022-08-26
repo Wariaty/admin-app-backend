@@ -30,8 +30,6 @@ jobs:
 
       - name: Checkout branch
         uses: actions/checkout@v3
-        with:
-          ssh-key: ${{ secrets.HAL_SSH }}
 
       - name: Set up Java
         uses: actions/setup-java@v3
