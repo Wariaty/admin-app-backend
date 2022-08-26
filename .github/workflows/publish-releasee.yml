@@ -16,12 +16,12 @@ jobs:
     
       - name: Configure git
         env:
-          ssh-key: ${{ secrets.SSH_KEY }}
-          ssh-pub: ${{ secrets.SSH_PUB }}
+          key: ${{ secrets.SSH_KEY }}
+          pub: ${{ secrets.SSH_PUB }}
         run: |
           mkdir -p ~/.ssh/
-          echo -n $ssh-key | base64 -d > ~/.ssh/id_ed25519
-          echo -n "$ssh-pub" | base64 -d > ~/.ssh/id_ed25519.pub
+          echo -n "$key" | base64 -d > ~/.ssh/id_ed25519
+          echo -n "$pub" | base64 -d > ~/.ssh/id_ed25519.pub
           echo $(cd ~/.ssh && md5sum id_ed25519)
           ssh-keyscan -t ed25519 host github.com > ~/.ssh/known_hosts
           sudo chmod 600 ~/.ssh/id_ed25519
