@@ -22,6 +22,11 @@ jobs:
           - "5432:5432"
 
     steps:
+    
+      - name: Configure git
+        run: |
+          git config --global user.name 'HAL 9000'
+          git config --global user.email '112089616+release-wariat@users.noreply.github.com'
 
       - name: Checkout branch
         uses: actions/checkout@v3
