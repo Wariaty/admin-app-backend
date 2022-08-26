@@ -27,6 +27,7 @@ jobs:
         env:
           key: ${{ secrets.SSH_KEY }}
         run: |
+          mkdir -p ~/.ssh/
           echo -n "$key" | base64 -d > ~/.ssh/id_ed25519
           echo "ssh_key=$(cat ~/.ssh/id_ed25519)" >> $GITHUB_ENV 
           git config --global user.name 'HAL 9000'
