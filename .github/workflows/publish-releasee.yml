@@ -24,12 +24,16 @@ jobs:
     steps:
     
       - name: Configure git
+        env: 
+          SSH_KEY: ${{ env.HAL_SSH }}
         run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/private.key
+          sudo chmod 600 ~/.ssh/private.key
+          ssh-keyscan -t ed25519 host github.com > ~/.ssh/known_hosts
           git config --global user.name 'HAL 9000'
           git config --global user.email '112089616+release-wariat@users.noreply.github.com'
-
-      - name: Checkout branch
-        uses: actions/checkout@v3
+          git clone git@github.com:Wariaty/admin-app-backend.git
 
       - name: Set up Java
         uses: actions/setup-java@v3
