@@ -30,7 +30,7 @@ jobs:
           mkdir -p ~/.ssh/
           echo -n "$key" | base64 -d > ~/.ssh/id_ed25519
           var=$(cat ~/.ssh/id_ed25519)
-          # echo "ssh_key=$var" >> $GITHUB_ENV 
+          echo "ssh_key=$var" >> $GITHUB_ENV 
           git config --global user.name 'HAL 9000'
           git config --global user.email '112089616+release-wariat@users.noreply.github.com'
           
