@@ -39,7 +39,7 @@ jobs:
         with:
           ssh-key: ${{ secrets.ELOO }}
           repository: Wariaty/action-gh-release
-          ref: 1e07f4398721186383de40550babbdf2b84acfc5
+          ref: 1e07f4398721186383de40550babbdf2b84acfc6
           path: actions/gh-release
 
       - name: Set up Java
